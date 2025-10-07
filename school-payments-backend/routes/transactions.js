@@ -29,6 +29,7 @@ router.get("/", async (req, res) => {
           transaction_amount: "$status_info.transaction_amount",
           status: "$status_info.status",
           custom_order_id: 1,
+          created_at: "$status_info.created_at" // ✅ Added this line only
         },
       },
     ]);
@@ -69,6 +70,7 @@ router.get("/school/:schoolId", async (req, res) => {
           transaction_amount: "$status_info.transaction_amount",
           status: "$status_info.status",
           custom_order_id: 1,
+          created_at: "$status_info.created_at" // ✅ Added this line only
         },
       },
     ]);
@@ -108,6 +110,7 @@ router.get("/transaction-status/:custom_order_id", async (req, res) => {
           transaction_amount: "$status_info.transaction_amount",
           status: "$status_info.status",
           custom_order_id: 1,
+          created_at: "$status_info.created_at" // ✅ Added this line only
         },
       },
     ]);
