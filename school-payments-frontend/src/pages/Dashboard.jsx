@@ -36,7 +36,7 @@ export default function Dashboard() {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="min-h-screen bg-teal-200 p-6">
       <div className="max-w-full mx-auto space-y-6">
         {/* Header */}
         <div className="flex justify-between items-center mb-4">
@@ -52,16 +52,16 @@ export default function Dashboard() {
         </div>
 
         {/* Search & Add Payment */}
-        <div className="flex flex-col md:flex-row justify-between items-center bg-white p-4 rounded-lg shadow">
+        <div className="flex flex-col md:flex-row justify-between items-center bg-blue-200 p-4 rounded-lg shadow">
           <div className="flex items-center space-x-2 w-full md:w-1/2 mb-2 md:mb-0">
             <input
               type="text"
               placeholder="Search(Order ID...)"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full p-2 border border-gray-800 rounded focus:ring-2 focus:ring-blue-500 outline-none"
             />
-            <select className="border border-gray-300 rounded p-2">
+            <select className="border border-gray-800 rounded p-2">
               <option>Filter By</option>
               <option>Status</option>
               <option>School</option>
@@ -69,7 +69,7 @@ export default function Dashboard() {
           </div>
           <button
             onClick={() => navigate("/payment")}
-            className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded font-semibold"
+            className=" border border-gray-800 hover:bg-teal-200 text-gray-800 px-4 py-2 rounded font-semibold"
           >
             Add Payment
           </button>
@@ -78,7 +78,7 @@ export default function Dashboard() {
         {/* Table */}
         <div className="overflow-x-auto">
           <table className="min-w-full table-auto bg-white shadow-md rounded-lg border-separate border-spacing-y-1">
-            <thead className="bg-blue-0 text-gray-800 font-semibold">
+            <thead className="bg-blue-200 text-gray-800 font-semibold">
               <tr>
                 <th className="px-3 py-2 text-center">Sr.No</th>
                 <th className="px-3 py-2 text-center">Collect ID</th>
@@ -93,7 +93,7 @@ export default function Dashboard() {
             <tbody>
               {loading ? (
                 <tr>
-                  <td colSpan={8} className="text-center py-4 text-gray-500">
+                  <td colSpan={8} className="text-center rounded-lg py-4 text-gray-500">
                     Loading...
                   </td>
                 </tr>
@@ -107,7 +107,7 @@ export default function Dashboard() {
                 filteredPayments.map((p, idx) => (
                   <tr
                     key={p.collect_id}
-                    className="bg-blue-50 text-sm transition-transform duration-200 ease-out hover:-translate-y-1 hover:shadow-md"
+                    className="bg-blue-50 rounded-2xl text-sm transition-transform duration-200 ease-out hover:-translate-y-1 hover:shadow-md"
                   >
                     <td className="px-3 py-2 text-center">{idx + 1}</td>
                     <td className="px-3 py-2 text-center">{p.collect_id}</td>
