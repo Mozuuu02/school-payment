@@ -15,9 +15,11 @@ export const AuthProvider = ({ children }) => {
     try {
       const res = await api.post("/auth/login", { email, password });
       const { token, user } = res.data;
+
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
       setUser(user);
+
       return { success: true };
     } catch (err) {
       return {
@@ -27,13 +29,10 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // 🔹 Updated register() — no token or user state saved
   const register = async (name, email, password) => {
     try {
-      const res = await api.post("/auth/register", { name, email, password });
-      const { token, user } = res.data;
-      localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify(user));
-      setUser(user);
+      await api.post("/auth/register", { name, email, password });
       return { success: true };
     } catch (err) {
       return {

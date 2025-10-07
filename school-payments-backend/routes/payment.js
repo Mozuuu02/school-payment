@@ -1,52 +1,149 @@
 const express = require("express");
 const router = express.Router();
-const Payment = require("../models/Payment"); // your payment model
-const { protect } = require("../middleware/auth");
-const Razorpay = require("razorpay");
+const axios = require("axios");
+const jwt = require("jsonwebtoken");
 
-// Initialize Razorpay instance
-const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID,
-  key_secret: process.env.RAZORPAY_KEY_SECRET,
-});
+const Order = require("../models/Order");
+const OrderStatus = require("../models/OrderStatus");
 
-// Create order route
-router.post("/create-order", protect, async (req, res) => {
-  const { amount } = req.body;
+// Load environment variables
+const EDVIRON_API_KEY = process.env.EDVIRON_API_KEY;
+const PG_SECRET_KEY = process.env.PG_SECRET_KEY;
+const SCHOOL_ID = process.env.SCHOOL_ID;
 
-  if (!amount) return res.status(400).json({ message: "Amount is required" });
+/**
+ * ✅ Create Edviron Payment Link AND Save to MongoDB
+ * POST /api/payments/create-collect-request
+ */
+router.post("/create-collect-request", async (req, res) => {
+  const { amount, callback_url, custom_order_id } = req.body;
+
+  if (!amount || !callback_url || !custom_order_id) {
+    return res
+      .status(400)
+      .json({ message: "Amount, callback_url, and custom_order_id are required" });
+  }
 
   try {
-    const options = {
-      amount: amount * 100, // in paise
-      currency: "INR",
-      receipt: `receipt_${Date.now()}`,
+    // 1️⃣ Generate JWT
+    const signPayload = {
+      school_id: SCHOOL_ID,
+      amount: amount.toString(),
+      callback_url,
     };
+    const sign = jwt.sign(signPayload, PG_SECRET_KEY);
 
-    const order = await razorpay.orders.create(options);
+    // 2️⃣ Always use DEV Edviron API (per assessment)
+    const BASE_URL = "https://dev-vanilla.edviron.com";
 
-    // Save in DB (optional)
-    const payment = await Payment.create({
-      user: req.user._id,
-      orderId: order.id,
-      amount,
-      status: "created",
+    console.log("🌐 Calling DEV Edviron API...");
+
+    const response = await axios.post(
+      `${BASE_URL}/erp/create-collect-request`,
+      {
+        school_id: SCHOOL_ID,
+        amount: amount.toString(),
+        callback_url,
+        sign,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${EDVIRON_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    console.log("✅ Edviron API response:", response.data);
+
+    // 3️⃣ Extract relevant fields
+    const { collect_request_id, payment_link, collect_request_url } = response.data;
+
+    // 4️⃣ Save Order in MongoDB
+    const newOrder = new Order({
+      collect_id: collect_request_id,
+      school_id: SCHOOL_ID,
+      gateway: "Edviron",
+      order_amount: amount,
+      custom_order_id,
     });
 
-    res.json(order);
-  } catch (err) {
-    console.error("Razorpay order creation error:", err);
-    res.status(500).json({ message: "Server error creating order" });
+    await newOrder.save();
+
+    // 5️⃣ Save initial OrderStatus
+    const newStatus = new OrderStatus({
+      collect_id: collect_request_id,
+      transaction_amount: 0,
+      status: "Pending",
+    });
+
+    await newStatus.save();
+
+    // 6️⃣ Return response — prefer collect_request_url (sandbox)
+    res.json({
+      message: "Payment link created and saved successfully",
+      data: {
+        collect_id: collect_request_id,
+        payment_link: payment_link || collect_request_url || null,
+      },
+    });
+  } catch (error) {
+    console.error("❌ Error creating payment link:", error.response?.data || error.message);
+    res.status(500).json({
+      message: "Failed to create payment link",
+      error: error.response?.data || error.message,
+    });
   }
 });
 
-// Get payments for logged-in user
-router.get("/user", protect, async (req, res) => {
+/**
+ * ✅ Check Edviron Payment Status
+ * GET /api/payments/check-status/:collect_request_id
+ */
+router.get("/check-status/:collect_request_id", async (req, res) => {
+  const { collect_request_id } = req.params;
+
+  if (!collect_request_id) {
+    return res.status(400).json({ message: "collect_request_id is required" });
+  }
+
   try {
-    const payments = await Payment.find({ user: req.user._id });
-    res.json(payments);
-  } catch (err) {
-    res.status(500).json({ message: "Server error" });
+    const signPayload = {
+      school_id: SCHOOL_ID,
+      collect_request_id,
+    };
+    const sign = jwt.sign(signPayload, PG_SECRET_KEY);
+
+    const BASE_URL = "https://dev-vanilla.edviron.com";
+
+    const response = await axios.get(
+      `${BASE_URL}/erp/collect-request/${collect_request_id}?school_id=${SCHOOL_ID}&sign=${sign}`,
+      {
+        headers: {
+          Authorization: `Bearer ${EDVIRON_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    // ✅ Update OrderStatus in MongoDB
+    const { transaction_amount, status } = response.data;
+    await OrderStatus.findOneAndUpdate(
+      { collect_id: collect_request_id },
+      { transaction_amount, status },
+      { new: true }
+    );
+
+    res.json({
+      message: "Payment status fetched successfully",
+      data: response.data,
+    });
+  } catch (error) {
+    console.error("❌ Error fetching payment status:", error.response?.data || error.message);
+    res.status(500).json({
+      message: "Failed to fetch payment status",
+      error: error.response?.data || error.message,
+    });
   }
 });
 
