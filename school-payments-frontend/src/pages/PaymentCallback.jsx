@@ -11,15 +11,31 @@ export default function PaymentCallback() {
       const status = searchParams.get("status");
       const requestId = searchParams.get("EdvironCollectRequestId");
 
-      if (status === "SUCCESS" && requestId) {
-        try {
-          await api.post("/payments/verify", { EdvironCollectRequestId: requestId });
+      if (!requestId) {
+        console.error("❌ Missing EdvironCollectRequestId");
+        navigate("/payment-failed");
+        return;
+      }
+
+      try {
+        // ✅ Always verify payment, including failed ones
+        await api.post("/payments/verify", {
+          EdvironCollectRequestId: requestId,
+          manualStatus: status, // 👈 new line — tells backend user’s selected status
+        });
+
+        const normalizedStatus = status?.toLowerCase();
+
+        if (normalizedStatus === "success") {
           navigate("/dashboard");
-        } catch (err) {
-          console.error("❌ Payment verification failed:", err);
+        } else if (normalizedStatus === "fail" || normalizedStatus === "failed") {
+          navigate("/payment-failed");
+        } else {
+          console.warn("⚠️ Unknown status:", status);
           navigate("/payment-failed");
         }
-      } else {
+      } catch (err) {
+        console.error("❌ Payment verification failed:", err);
         navigate("/payment-failed");
       }
     };
