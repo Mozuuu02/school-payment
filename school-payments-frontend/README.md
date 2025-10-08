@@ -1,16 +1,125 @@
-# React + Vite
+# 🎓 School Payment Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Frontend for the **School Payment Web Application**, built using **React (Vite)**.  
+It provides an intuitive interface for students and administrators to manage school fee payments, track transactions, and view receipts — all connected to a secure **Node.js + Express** backend.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Tech Stack
 
-## React Compiler
+- **React (Vite)**
+- **Axios** (API handling)
+- **React Router DOM**
+- **Tailwind CSS**
+- **Vercel** (Frontend Deployment)
+- **Render** (Backend Deployment)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## ⚙️ Project Setup Instructions
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### 1️⃣ Clone the Repository
+```bash
+git clone https://github.com/yourusername/your-repo.git
+cd frontend
+2️⃣ Install Dependencies
+bash
+Copy code
+npm install
+3️⃣ Create a .env File
+In your project root, create a .env file and add:
+
+bash
+Copy code
+VITE_API_URL=https://school-payment-pzht.onrender.com
+VITE_BASE_URL=http://localhost:5173
+Note:
+
+Environment variables in Vite must start with VITE_.
+
+Do not include the .env file in GitHub (make sure it’s in .gitignore).
+
+4️⃣ Run the App Locally
+bash
+Copy code
+npm run dev
+App will run at 👉 http://localhost:5173
+
+🧠 Page Documentation
+🏠 Home Page (/)
+
+Displays welcome message and brief overview of the app.
+
+Navigation links to Login, Register, or Dashboard based on user status.
+
+🔐 Login Page (/login)
+
+Allows existing users to log in using email & password.
+
+Sends a POST request to /api/auth/login.
+
+On success → redirects to Dashboard and stores JWT in local storage.
+
+🧾 Register Page (/register)
+
+Creates a new user account via /api/auth/register.
+
+Validates input before sending data to the backend.
+
+Displays success/error messages from the server.
+
+💳 Payment Page (/payments)
+
+Displays fee payment options and integrates with payment gateway.
+
+Sends payment request to /api/payments/initiate.
+
+Uses callback_url → ${import.meta.env.VITE_BASE_URL}/payment-callback.
+
+🔁 Payment Callback (/payment-callback)
+
+Handles payment response after transaction completion.
+
+Updates backend with transaction status.
+
+Shows success/failure UI message to user.
+
+
+☁️ Deployment on Vercel
+
+Go to Vercel
+
+Import your GitHub repository
+
+Set Environment Variables under Project Settings → Environment Variables:
+
+VITE_API_URL=https://school-payment-pzht.onrender.com
+
+VITE_BASE_URL=https://school-payment-rho.vercel.app
+
+Click Deploy
+
+Your app will be live at:
+👉 https://school-payment-rho.vercel.app
+
+🧪 Testing Checklist
+
+✅ Register a new user
+✅ Login and receive JWT token
+✅ Initiate a payment
+✅ Verify callback updates backend
+✅ View transaction history
+✅ Confirm CORS works between frontend (Vercel) & backend (Render)
+
+
+📄 License
+
+This project is open-source under the MIT License
+.
+
+👨‍💻 Author
+
+Mozammil Khan
+GitHub: @Mozuuu02
+
+Email: mozammilk120@gmail.com
