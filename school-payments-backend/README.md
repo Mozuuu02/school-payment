@@ -18,8 +18,9 @@ It provides authentication, payment handling, and transaction management APIs.
 
 ## ⚙️ Setup and Installation
 
-### 1️⃣ Clone the Repository
+
 ```bash
+1️⃣ Clone the Repository
 git clone https://github.com/yourusername/your-repo.git
 cd backend
 
