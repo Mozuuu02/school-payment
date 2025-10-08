@@ -171,7 +171,6 @@ This project is open source under the MIT License
 
 👨‍💻 Author
 
-Your Name
+Mozammil Khan
 GitHub: @Mozuuu02
-
 Email: mozammilk1203@gmail.com
