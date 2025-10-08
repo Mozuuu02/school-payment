@@ -21,8 +21,8 @@ It provides authentication, payment handling, and transaction management APIs.
 
 ```bash
 1️⃣ Clone the Repository
-git clone https://github.com/yourusername/your-repo.git
-cd backend
+git clone https://github.com/Mozuuu02/school-payment.git
+cd school-payments-frontend
 
 2️⃣ Install Dependencies
 npm install
@@ -143,7 +143,7 @@ Connect your GitHub repository
 
 Set:
 
-Root Directory: /backend (if using monorepo)
+Root Directory: /school-payments-frontend
 
 Build Command: npm install
 
