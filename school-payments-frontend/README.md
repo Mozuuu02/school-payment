@@ -23,17 +23,15 @@ It provides an intuitive interface for students and administrators to manage sch
 
 ```bash
 1️⃣ Clone the Repository
-git clone https://github.com/yourusername/your-repo.git
-cd frontend
+git clone https://github.com/Mozuuu02/school-payment.git
+cd school-payments-frontend
+
 2️⃣ Install Dependencies
-bash
-Copy code
 npm install
+
 3️⃣ Create a .env File
 In your project root, create a .env file and add:
 
-bash
-Copy code
 VITE_API_URL=https://school-payment-pzht.onrender.com
 VITE_BASE_URL=http://localhost:5173
 Note:
@@ -43,19 +41,12 @@ Environment variables in Vite must start with VITE_.
 Do not include the .env file in GitHub (make sure it’s in .gitignore).
 
 4️⃣ Run the App Locally
-bash
-Copy code
 npm run dev
 App will run at 👉 http://localhost:5173
 
 🧠 Page Documentation
-🏠 Home Page (/)
 
-Displays welcome message and brief overview of the app.
-
-Navigation links to Login, Register, or Dashboard based on user status.
-
-🔐 Login Page (/login)
+🔐 Login Page (/)
 
 Allows existing users to log in using email & password.
 
