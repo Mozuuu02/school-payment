@@ -5,6 +5,8 @@ It provides an intuitive interface for students and administrators to manage sch
 
 ---
 
+![Transaction History](https://github.com/Mozuuu02/school-payment/blob/main/school-payments-frontend/src/assets/screenshots/history.png?raw=true)
+
 ## 🚀 Tech Stack
 
 - **React (Vite)**
