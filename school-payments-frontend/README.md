@@ -20,7 +20,7 @@ It provides an intuitive interface for students and administrators to manage sch
 
 
 ```bash
-### 1️⃣ Clone the Repository
+1️⃣ Clone the Repository
 git clone https://github.com/yourusername/your-repo.git
 cd frontend
 2️⃣ Install Dependencies
