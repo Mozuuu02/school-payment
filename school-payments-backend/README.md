@@ -172,6 +172,6 @@ This project is open source under the MIT License
 👨‍💻 Author
 
 Your Name
-GitHub: @yourusername
+GitHub: @Mozuuu02
 
-Email: youremail@example.com
+Email: mozammilk1203@gmail.com
