@@ -11,12 +11,12 @@ export default function Payment() {
     setError("");
     setSuccess("");
 
-    const API_URL = process.env.REACT_APP_API_URL;
+const API_URL = import.meta.env.VITE_API_URL;
 
     try {
       const res = await api.post("/payments/create-collect-request", {
        amount: Number(amount),
-       callback_url: `${process.env.REACT_APP_BASE_URL}/payment-callback`,
+       callback_url: `${import.meta.env.VITE_BASE_URL}/payment-callback`,
       custom_order_id: `ORD-${Date.now()}`,
       });
 
