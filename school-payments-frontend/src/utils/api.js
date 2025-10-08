@@ -1,9 +1,10 @@
 import axios from "axios";
 
-console.log("API URL:", process.env.REACT_APP_API_URL);
+const baseURL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+console.log("API URL:", baseURL);
 
 const api = axios.create({
-  baseURL: `${process.env.REACT_APP_API_URL}/api`,
+ baseURL: `${baseURL}/api`,
 });
 
 
