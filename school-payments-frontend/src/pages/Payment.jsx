@@ -11,11 +11,13 @@ export default function Payment() {
     setError("");
     setSuccess("");
 
+    const API_URL = process.env.REACT_APP_API_URL;
+
     try {
       const res = await api.post("/payments/create-collect-request", {
-        amount: Number(amount),
-        callback_url: "http://localhost:5173/payment-callback", // your frontend callback
-        custom_order_id: `ORD-${Date.now()}`,
+       amount: Number(amount),
+       callback_url: `${process.env.REACT_APP_BASE_URL}/payment-callback`,
+      custom_order_id: `ORD-${Date.now()}`,
       });
 
       console.log("💬 Backend response:", res.data);
